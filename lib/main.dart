@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
+import 'package:music_app/models/song_model.dart';
 import 'package:music_app/screens/home_screen.dart';
+import 'package:music_app/screens/playlist_screen.dart';
 import 'package:music_app/screens/song_screen.dart';
 
 void main() {
@@ -22,11 +24,11 @@ class MyApp extends StatelessWidget {
           displayColor: Colors.white,
         )
       ),
-      home: const HomeScreen(),
+      home: const SongScreen(),
       getPages: [
         GetPage(name: "/", page: () => const HomeScreen()),
         GetPage(name: "/song", page: () => const SongScreen()),
-        // GetPage(name: "/playlist", page: () => const PlaylistScreen()),
+        GetPage(name: "/playlist", page: () => const PlaylistScreen()),
       ],
     );
   }

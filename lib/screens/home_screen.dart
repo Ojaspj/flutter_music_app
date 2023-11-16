@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:get/utils.dart';
+import 'package:music_app/models/playlist_model.dart';
+import 'package:music_app/models/song_model.dart';
+import 'package:music_app/widgets/playlist_card.dart';
+import 'package:music_app/widgets/section_header.dart';
+import 'package:music_app/widgets/song_card.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    List<Song> songs = Song.songs;
+    List<Playlist> playlists = Playlist.playlists;
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -16,34 +22,29 @@ class HomeScreen extends StatelessWidget {
               Colors.deepPurple.shade200,
             ]),
       ),
-      child:  Scaffold(
+      child: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar:const _CustomAppBar(),
+        appBar: const _CustomAppBar(),
         bottomNavigationBar: const _CustomNavbar(),
         body: SingleChildScrollView(
           child: Column(
             children: [
+              const _DiscoverMusic(),
+              _TrendingMusic(songs: songs),
               Padding(
-                padding: const EdgeInsetsDirectional.all(14.0),
+                padding: const EdgeInsets.all(20.0),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "Welcome!",
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyLarge!
-                    ),
-                    Text(
-                      "Enjoy your favourite music",
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge!
-                          .copyWith(fontWeight: FontWeight.bold),
-                    ),
+                    const SectionHeader(title: "Playtlists"),
+                    ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: playlists.length,
+                        itemBuilder: ((context, index) {
+                          return PlaylistCard(playlist: playlists[index]);
+                        }))
                   ],
                 ),
-              ),
+              )
             ],
           ),
         ),
@@ -52,11 +53,100 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class _CustomNavbar extends StatelessWidget {
-  const _CustomNavbar({
+
+
+class _TrendingMusic extends StatelessWidget {
+  const _TrendingMusic({
     super.key,
+    required this.songs,
   });
 
+  final List<Song> songs;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 20.0, top: 20.0, bottom: 20.0),
+      child: Column(
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(right: 20.0),
+            child: SectionHeader(title: "Trending Music"),
+          ),
+          const SizedBox(
+            height: 20.0,
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.27,
+            child: ListView.builder(
+              itemCount: songs.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                return SongCard(song: songs[index]);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _DiscoverMusic extends StatelessWidget {
+  const _DiscoverMusic({
+    Key? key, // Provide the correct type and make it optional
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsetsDirectional.all(14.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("Welcome!", style: Theme.of(context).textTheme.bodyLarge!),
+          const SizedBox(
+            height: 5.0,
+          ),
+          Text(
+            "Enjoy your favourite music",
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge!
+                .copyWith(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(
+            height: 20.0,
+          ),
+          TextFormField(
+              decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white,
+            hintText: 'Search',
+            isDense: true,
+            hintStyle: Theme.of(context)
+                .textTheme
+                .bodyMedium!
+                .copyWith(color: Colors.grey.shade400),
+            prefixIcon: Icon(
+              Icons.search,
+              color: Colors.grey.shade400,
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15.0),
+              borderSide: BorderSide.none,
+            ),
+          )),
+        ],
+      ),
+    );
+  }
+}
+
+class _CustomNavbar extends StatelessWidget {
+  const _CustomNavbar({
+    Key? key, // Provide the correct type and make it optional
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
@@ -90,8 +180,8 @@ class _CustomNavbar extends StatelessWidget {
 
 class _CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const _CustomAppBar({
-    super.key,
-  });
+    Key? key, // Provide the correct type and make it optional
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

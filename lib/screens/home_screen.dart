@@ -15,12 +15,13 @@ class HomeScreen extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.deepPurple.shade800,
-              Colors.deepPurple.shade200,
-            ]),
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Colors.deepPurple.shade800,
+            Colors.deepPurple.shade200,
+          ],
+        ),
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -39,6 +40,8 @@ class HomeScreen extends StatelessWidget {
                     ListView.builder(
                         shrinkWrap: true,
                         itemCount: playlists.length,
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: const EdgeInsets.only(top: 20),
                         itemBuilder: ((context, index) {
                           return PlaylistCard(playlist: playlists[index]);
                         }))
@@ -52,8 +55,6 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-
-
 
 class _TrendingMusic extends StatelessWidget {
   const _TrendingMusic({
